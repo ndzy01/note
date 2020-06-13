@@ -39,3 +39,7 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 npm install mobx-react-lite
 npm install mobx
 npm install braft-editor braft-utils
+
+~~~
+npx electron-packager ./build note --all --out ./OutApp --app-version 1.0.0 --overwrite --icon=./public/app.ico
+~~~

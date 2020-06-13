@@ -2,6 +2,8 @@
   "name": "note",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
+  "main": "main.js",
   "dependencies": {
     "@babel/core": "7.9.0",
     "@svgr/webpack": "4.3.3",
@@ -78,6 +80,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
+    "e-start": "electron .",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
@@ -152,6 +155,9 @@
     ]
   },
   "devDependencies": {
+    "electron": "^9.0.3",
+    "electron-builder": "^22.7.0",
+    "electron-packager": "^14.2.1",
     "sass-resources-loader": "^2.0.3"
   }
 }
