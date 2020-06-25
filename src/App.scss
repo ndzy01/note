@@ -30,7 +30,6 @@
   &-footer {
     color: #fff;
     min-height: 60px;
-    // 代码作用 使子元素 水平垂直居中
     display: flex;
     align-items: center;
     justify-content: center;
@@ -40,20 +39,6 @@
     min-height: 300px;
     flex: auto;
     display: flex;
-    &-aside-expend{
-      padding: 5px;
-      flex: none;
-      width: 200px;
-      border-right: 2px dotted pink;
-      overflow-y: auto;
-    }
-    &-aside-collapse{
-      display: none;
-      // flex: none;
-      // width: 0px;
-   
-    }
- 
     &-main {
       min-height: 300px;
       flex: auto;
@@ -62,7 +47,7 @@
 
       &-content {
         min-height: 300px;
-        padding: 10px;
+        padding: 20px;
         flex: auto;
       }
     }

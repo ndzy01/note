@@ -1,4 +1,4 @@
-import React, { Suspense, Fragment,useState } from 'react';
+import React, { Suspense, Fragment, useRef, useState, useEffect } from 'react';
 import {
   // BrowserRouter as Router,
   Route,
@@ -6,20 +6,43 @@ import {
   HashRouter,
   Redirect,
 } from 'react-router-dom';
-import { createHashHistory } from 'history'
-import {Button} from 'antd'
+import moment from 'moment';
+import { createHashHistory } from 'history';
+import { Button, Typography } from 'antd';
 import config from './config';
 import hooks from './hooks';
 import api from './http';
 
-import Err404 from './views/Err404'
-import TreeShow from './components/tree'
+import Err404 from './views/Err404';
+import TreeShow from './components/tree';
+import Drawer01 from './components/drawer/drawer01';
 import './App.scss';
-const history = createHashHistory()
+const history = createHashHistory();
+const { Paragraph } = Typography;
 
+function Clock() {
+  const [date, setDate] = useState(new Date().valueOf());
+
+  useEffect(() => {
+    function tick() {
+      setDate(new Date().valueOf());
+    }
+    const timerID = setInterval(tick, 1000);
+
+    return function clearTick() {
+      clearInterval(timerID);
+    };
+  });
+
+  return (
+      <Paragraph copyable style={{display:"inline-block"}} className="app-margin10">
+        {moment(new Date().valueOf()).format('YYYY-MM-DD HH:mm:ss')}
+      </Paragraph>
+  );
+}
 
 function App() {
-  const [isExpend,setIsExpend]=useState(true)
+  const appRef: any = useRef();
   const setLogo = (url: string) => {
     let link = document.createElement('link');
     link.type = 'image/x-icon';
@@ -32,55 +55,63 @@ function App() {
       setLogo(res.data.data.url);
     });
   });
- 
+
   return (
     <HashRouter>
       <Switch>
         <Fragment>
-          <section className="app">
+          <div className="app">
             <header className="app-header">
-              <section className="app-header-body">
-                <section className="app-header-body-logo" >
-                <Button type="primary" onClick={
-              () => {
-                setIsExpend(!isExpend)
-              }
-            }>{isExpend?"收起":"展开"}</Button>
-                </section>
-                <section style={{
-                  flex: "auto",
-                  lineHeight:"60px",
-                  textAlign:"center"
-                }}> 
-                  <Button className="app-margin10" onClick={
-              () => {
-                history.push("/home")
-              }
-            }>主页
-                     
-            </Button>  
-                     <Button className="app-margin10" onClick={
-              () => {
-                history.push("/add")
-              }
-            }>添加</Button>  
-                     <Button className="app-margin10" onClick={
-              () => {
-                history.push("/edit")
-              }
-            }>编辑</Button>  
-            </section>
-             
-              </section>
+              <div className="app-header-body">
+                <div className="app-header-body-logo">
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      appRef.current.showDrawer();
+                    }}
+                  >
+                    open
+                  </Button>
+                </div>
+                <div
+                  style={{
+                    flex: 'auto',
+                    lineHeight: '60px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Button
+                    className="app-margin10"
+                    onClick={() => {
+                      history.push('/home');
+                    }}
+                  >
+                    主页
+                  </Button>
+                  <Button
+                    className="app-margin10"
+                    onClick={() => {
+                      history.push('/add');
+                    }}
+                  >
+                    添加
+                  </Button>
+                  <Button
+                    className="app-margin10"
+                    onClick={() => {
+                      history.push('/edit');
+                    }}
+                  >
+                    编辑
+                  </Button>
+                  <Clock />
+                </div>
+              </div>
             </header>
-            <section className="app-body">
-              <aside className={isExpend ? "app-body-aside-expend" : "app-body-aside-collapse"}>
-              <TreeShow
-     
-    />
-              </aside>
-              <section className="app-body-main">
-                <section className="app-body-main-content">
+            <div className="app-body">
+              <Drawer01 ref={appRef} childen={<TreeShow />} />
+              <div className="app-body-main">
+                <div className="app-body-main-content">
                   <Suspense fallback={<span className="page-spin"></span>}>
                     <Switch>
                       {config.routers.map((route, i) => {
@@ -90,13 +121,13 @@ function App() {
                       <Route component={Err404} />
                     </Switch>
                   </Suspense>
-                </section>
+                </div>
                 <footer className="app-footer">
                   <h1>ndzy</h1>
                 </footer>
-              </section>
-            </section>
-          </section>
+              </div>
+            </div>
+          </div>
         </Fragment>
       </Switch>
     </HashRouter>
